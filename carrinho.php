@@ -5,13 +5,13 @@ if (!isset($_SESSION['carrinho'])) $_SESSION['carrinho']=[];
 $acao = $_POST['acao'] ?? $_GET['acao'] ?? '';
 if ($acao==='add') {
     $pid=(int)$_POST['produto_id']; $_SESSION['carrinho'][$pid]=($_SESSION['carrinho'][$pid]??0)+1;
-    header('Location:/carrinho.php'); exit;
+    header('Location:' . url('/carrinho.php')); exit;
 }
-if ($acao==='remove') { unset($_SESSION['carrinho'][(int)$_GET['id']]); header('Location:/carrinho.php'); exit; }
-if ($acao==='clear')  { $_SESSION['carrinho']=[]; header('Location:/carrinho.php'); exit; }
+if ($acao==='remove') { unset($_SESSION['carrinho'][(int)$_GET['id']]); header('Location:' . url('/carrinho.php')); exit; }
+if ($acao==='clear')  { $_SESSION['carrinho']=[]; header('Location:' . url('/carrinho.php')); exit; }
 if ($acao==='qtd')    {
     $pid=(int)$_POST['id']; $q=max(1,(int)$_POST['qtd']);
-    $_SESSION['carrinho'][$pid]=$q; header('Location:/carrinho.php'); exit;
+    $_SESSION['carrinho'][$pid]=$q; header('Location:' . url('/carrinho.php')); exit;
 }
 
 require __DIR__.'/php/includes/header.php';
@@ -36,7 +36,7 @@ $wppUrl = "https://wa.me/{$config['whatsapp']}?text=".$msg;
 <div style="display:grid;grid-template-columns:2fr 1fr;gap:20px" class="cart-layout">
   <div>
     <?php foreach ($itens as $p):
-      $img=$p['imagem_principal']?'/uploads/'.$p['imagem_principal']:'https://via.placeholder.com/100'; ?>
+      $img=$p['imagem_principal']?url('/uploads/').$p['imagem_principal']:'https://via.placeholder.com/100'; ?>
       <div class="cart-row">
         <img src="<?=e($img)?>">
         <div class="info">
@@ -51,13 +51,13 @@ $wppUrl = "https://wa.me/{$config['whatsapp']}?text=".$msg;
         <a href="?acao=remove&id=<?=$p['id']?>" data-confirm="Remover item?">🗑️</a>
       </div>
     <?php endforeach; if(!$itens):?>
-      <p>Seu carrinho está vazio. <a href="/catalogo.php">Ver produtos</a></p>
+      <p>Seu carrinho está vazio. <a href="<?= url('/catalogo.php') ?>">Ver produtos</a></p>
     <?php endif;?>
   </div>
   <div class="summary">
     <h3>Resumo do Pedido</h3>
     <p style="font-size:22px;margin:14px 0">Total: <strong>R$ <?=number_format($total,2,',','.')?></strong></p>
-    <a href="/catalogo.php" class="btn btn-outline btn-block" style="margin-bottom:8px">Continuar Comprando</a>
+    <a href="<?= url('/catalogo.php') ?>" class="btn btn-outline btn-block" style="margin-bottom:8px">Continuar Comprando</a>
     <a href="?acao=clear" class="btn btn-outline btn-block" data-confirm="Esvaziar carrinho?">Esvaziar Carrinho</a>
     <?php if($itens):?>
       <a href="<?=$wppUrl?>" target="_blank" class="btn btn-block" style="margin-top:14px">Finalizar a compra</a>

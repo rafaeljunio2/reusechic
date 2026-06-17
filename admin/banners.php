@@ -36,7 +36,7 @@ $banners = $pdo->query("SELECT * FROM banners ORDER BY ordem")->fetchAll();
 <table>
   <tr><th>Imagem</th><th>Título</th><th>Ordem</th><th>Ativo</th><th>Ações</th></tr>
   <?php foreach($banners as $b):?>
-    <tr><td><img src="/uploads/<?=e($b['imagem'])?>" style="width:80px"></td>
+    <tr><td><img src="<?= url('/uploads/') ?><?=e($b['imagem'])?>" style="width:80px"></td>
     <td><?=e($b['titulo'])?></td><td><?=$b['ordem']?></td><td><?=$b['ativo']?'✅':'❌'?></td>
     <td><a href="?edit=<?=$b['id']?>">✏️</a> <a href="?del=<?=$b['id']?>" data-confirm="Excluir?">🗑️</a></td></tr>
   <?php endforeach;?>

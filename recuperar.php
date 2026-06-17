@@ -9,10 +9,10 @@ if ($_SERVER['REQUEST_METHOD']==='POST') {
 }
 ?>
 <!DOCTYPE html><html><head><meta charset="UTF-8"><title>Recuperar senha</title>
-<link rel="stylesheet" href="/css/style.css">
+<link rel="stylesheet" href="<?= url('/css/style.css') ?>">
 <style>:root{--primary-color:<?=e($config['cor_primaria'])?>;--secondary-color:<?=e($config['cor_secundaria'])?>;}</style>
 </head><body>
-<a href="/login.php" class="back-link">← Voltar</a>
+<a href="<?= url('/login.php') ?>" class="back-link">← Voltar</a>
 <div class="auth-wrap"><form class="auth-card" method="post">
   <h1>RECUPERAR SENHA</h1>
   <?php if($msg):?><div class="alert alert-success"><?=e($msg)?></div><?php endif;?>

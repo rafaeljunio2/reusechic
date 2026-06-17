@@ -14,10 +14,9 @@ if ($_SERVER['REQUEST_METHOD']==='POST') {
     $imgPrincipal = $_POST['imagem_existente'] ?? null;
 
     if (!empty($_FILES['imagem']['name'])) {
-        $ext = pathinfo($_FILES['imagem']['name'], PATHINFO_EXTENSION);
-        $nome = uniqid('p_').'.'.$ext;
-        move_uploaded_file($_FILES['imagem']['tmp_name'], __DIR__.'/../uploads/'.$nome);
-        $imgPrincipal = $nome;
+        $saved = saveUpload($_FILES['imagem'], 'p_');
+        if ($saved) $imgPrincipal = $saved;
+        else $msg = 'Erro ao salvar imagem principal. Verifique permissões da pasta uploads (chmod 775).';
     }
 
     if ($id) {
@@ -32,13 +31,16 @@ if ($_SERVER['REQUEST_METHOD']==='POST') {
     // galeria múltipla
     if (!empty($_FILES['galeria']['name'][0])) {
         foreach ($_FILES['galeria']['name'] as $k=>$nm) {
-            $ext = pathinfo($nm, PATHINFO_EXTENSION);
-            $fn = uniqid('g_').'.'.$ext;
-            move_uploaded_file($_FILES['galeria']['tmp_name'][$k], __DIR__.'/../uploads/'.$fn);
-            $pdo->prepare("INSERT INTO imagens_produtos (produto_id,caminho) VALUES (?,?)")->execute([$id,$fn]);
+            if (!$nm) continue;
+            $fn = saveUpload([
+                'name' => $nm,
+                'tmp_name' => $_FILES['galeria']['tmp_name'][$k],
+                'error' => $_FILES['galeria']['error'][$k],
+            ], 'g_');
+            if ($fn) $pdo->prepare("INSERT INTO imagens_produtos (produto_id,caminho) VALUES (?,?)")->execute([$id,$fn]);
         }
     }
-    $msg='Produto salvo!';
+    if (!$msg) $msg = 'Produto salvo!';
 }
 
 $edit = null;
@@ -51,7 +53,7 @@ $cats = $pdo->query("SELECT * FROM categorias ORDER BY nome")->fetchAll();
 $produtos = $pdo->query("SELECT p.*, c.nome cat FROM produtos p LEFT JOIN categorias c ON c.id=p.categoria_id ORDER BY p.criado_em DESC")->fetchAll();
 ?>
 <h1>Produtos</h1>
-<?php if($msg):?><div class="alert alert-success"><?=e($msg)?></div><?php endif;?>
+<?php if($msg):?><div class="alert <?= str_contains($msg,'Erro')?'alert-error':'alert-success' ?>"><?=e($msg)?></div><?php endif;?>
 
 <div class="card" style="margin-bottom:20px">
   <h3><?= $edit?'Editar':'Novo' ?> produto</h3>
@@ -84,7 +86,7 @@ $produtos = $pdo->query("SELECT p.*, c.nome cat FROM produtos p LEFT JOIN catego
     <div class="form-row"><label>Imagem principal</label><input type="file" name="imagem" accept="image/*"></div>
     <div class="form-row"><label>Galeria (várias)</label><input type="file" name="galeria[]" accept="image/*" multiple></div>
     <button class="btn">Salvar</button>
-    <?php if($edit):?><a href="/admin/produtos.php" class="btn btn-outline">Cancelar</a><?php endif;?>
+    <?php if($edit):?><a href="<?= url('/admin/produtos.php') ?>" class="btn btn-outline">Cancelar</a><?php endif;?>
   </form>
 </div>
 
@@ -92,7 +94,7 @@ $produtos = $pdo->query("SELECT p.*, c.nome cat FROM produtos p LEFT JOIN catego
   <tr><th>Imagem</th><th>Nome</th><th>Categoria</th><th>Preço</th><th>Status</th><th>Ações</th></tr>
   <?php foreach($produtos as $p):?>
     <tr>
-      <td><?php if($p['imagem_principal']):?><img src="/uploads/<?=e($p['imagem_principal'])?>" style="width:50px;height:50px;object-fit:cover;border-radius:6px"><?php endif;?></td>
+      <td><?php if($p['imagem_principal']):?><img src="<?= url('/uploads/') ?><?=e($p['imagem_principal'])?>" style="width:50px;height:50px;object-fit:cover;border-radius:6px"><?php endif;?></td>
       <td><?=e($p['nome'])?></td>
       <td><?=e($p['cat']??'-')?></td>
       <td>R$ <?=number_format($p['preco'],2,',','.')?></td>

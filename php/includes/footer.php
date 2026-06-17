@@ -17,6 +17,6 @@
     <p>WhatsApp · Instagram · Facebook</p>
   </div>
 </footer>
-<script src="/js/app.js"></script>
+<script src="<?= url('/js/app.js') ?>"></script>
 </body>
 </html>

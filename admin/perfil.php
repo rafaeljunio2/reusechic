@@ -17,7 +17,7 @@ if ($_SERVER['REQUEST_METHOD']==='POST') {
     <div class="form-row"><label>Telefone</label><input name="contato" value="<?=e($a['contato'])?>"></div>
     <div class="form-row"><label>Nova senha (deixe em branco para manter)</label><input type="password" name="senha"></div>
     <button class="btn">Salvar</button>
-    <a href="/admin/logout.php" class="btn btn-outline">Logout</a>
+    <a href="<?= url('/admin/logout.php') ?>" class="btn btn-outline">Logout</a>
   </form>
 </div>
 <?php require __DIR__.'/_footer.php'; ?>

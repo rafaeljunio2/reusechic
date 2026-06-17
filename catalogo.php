@@ -49,9 +49,9 @@ $cats = $pdo->query("SELECT * FROM categorias ORDER BY nome")->fetchAll();
 
 <div class="products-grid">
   <?php foreach($produtos as $p):
-    $img = $p['imagem_principal'] ? '/uploads/'.$p['imagem_principal'] : 'https://via.placeholder.com/300';
+    $img = $p['imagem_principal'] ? url('/uploads/').$p['imagem_principal'] : 'https://via.placeholder.com/300';
   ?>
-    <a href="/produto.php?id=<?=$p['id']?>" class="product-card">
+    <a href="<?= url('/produto.php') ?>?id=<?=$p['id']?>" class="product-card">
       <img src="<?=e($img)?>" alt="<?=e($p['nome'])?>">
       <h3><?=e($p['nome'])?> (<?=e($p['tamanho'])?>)</h3>
       <p class="price">R$ <?=number_format($p['preco'],2,',','.')?></p>

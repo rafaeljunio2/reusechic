@@ -10,6 +10,6 @@ $u=$stmt->fetch();
   <p><strong>Nome:</strong> <?=e($u['nome'])?></p>
   <p><strong>E-mail:</strong> <?=e($u['email'])?></p>
   <p><strong>Contato:</strong> <?=e($u['contato'])?></p>
-  <a href="/logout.php" class="btn" style="margin-top:14px">Sair</a>
+  <a href="<?= url('/logout.php') ?>" class="btn" style="margin-top:14px">Sair</a>
 </div>
 <?php require __DIR__.'/../php/includes/footer.php'; ?>
