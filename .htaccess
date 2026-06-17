@@ -1,0 +1,5 @@
+RewriteEngine On
+# Bloqueia acesso direto a includes/config
+<FilesMatch "\.(sql|md)$">
+  Require all denied
+</FilesMatch>
