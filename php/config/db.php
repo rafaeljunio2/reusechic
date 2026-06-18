@@ -8,7 +8,7 @@ if ($isLocal) {
     $DB_USER = 'root';
     $DB_PASS = '';
 } else {
-    $DB_HOST = 'r194.146.13.195';
+    $DB_HOST = '194.146.13.195';
     $DB_PORT = '3310';
     $DB_NAME = 'reusechic';
     $DB_USER = 'reusechic';
