@@ -1,11 +1,19 @@
 <?php
-// Configuração de conexão com MySQL via PDO
-// Em produção (Docker/Dokploy) defina as variáveis de ambiente DB_HOST, DB_NAME, DB_USER, DB_PASS
-$DB_HOST = getenv('DB_HOST') ?: 'localhost';
-$DB_PORT = getenv('DB_PORT') ?: '3306';
-$DB_NAME = getenv('DB_NAME') ?: 'reusechic';
-$DB_USER = getenv('DB_USER') ?: 'root';
-$DB_PASS = getenv('DB_PASS') !== false ? getenv('DB_PASS') : '';
+$isLocal = in_array($_SERVER['SERVER_NAME'] ?? '', ['localhost', '127.0.0.1', '']);
+
+if ($isLocal) {
+    $DB_HOST = 'localhost';
+    $DB_PORT = '3306';
+    $DB_NAME = 'reusechic';
+    $DB_USER = 'root';
+    $DB_PASS = '';
+} else {
+    $DB_HOST = 'reusechic-db-f7fqi0';
+    $DB_PORT = '3306';
+    $DB_NAME = 'reusechic';
+    $DB_USER = 'reusechic';
+    $DB_PASS = '47beLVrSzV8Hkba5sscj';
+}
 
 try {
     $pdo = new PDO(
