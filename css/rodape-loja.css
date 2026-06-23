@@ -1,0 +1,55 @@
+/* =======================================================
+   RODAPÉ (includes/rodape_loja.php)
+======================================================= */
+.rodape-loja {
+  background: #f7d9dd;
+
+  display: flex;
+  flex-wrap: wrap;
+  gap: 32px;
+
+  padding: 32px;
+}
+
+.rodape-loja__coluna {
+  flex: 1 1 180px;
+}
+
+.rodape-loja__coluna h4 {
+  font-size: 14px;
+  color: #4a3b38;
+  margin-bottom: 10px;
+}
+
+.rodape-loja__coluna p,
+.rodape-loja__coluna a {
+  font-size: 13px;
+  color: #6b5a56;
+  line-height: 1.6;
+}
+
+.rodape-loja__ilustracao {
+  flex: 0 0 auto;
+  align-self: flex-end;
+}
+
+.rodape-loja__ilustracao img {
+  width: 110px;
+}
+
+/* "Selos" de pagamento / redes sociais — texto, até existirem ícones reais */
+.rodape-loja__selos {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.rodape-loja__selos span,
+.rodape-loja__selos a {
+  background: #ffffff;
+  color: #6b5a56;
+
+  font-size: 11px;
+  padding: 4px 10px;
+  border-radius: 12px;
+}

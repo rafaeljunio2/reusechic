@@ -1,0 +1,20 @@
+/* =======================================================
+   BANNER PROMOCIONAL ("GARIMPE AGORA...")
+======================================================= */
+.banner-promocional {
+  background: #f7d9dd;
+  padding: 48px 32px;
+  text-align: center;
+}
+
+.banner-promocional p {
+  font-family: 'Playfair Display', serif;
+  font-style: italic;
+  font-weight: 600;
+
+  font-size: 28px;
+  color: #4a3b38;
+
+  max-width: 900px;
+  margin: 0 auto;
+}

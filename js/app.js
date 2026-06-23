@@ -21,4 +21,6 @@ document.addEventListener('DOMContentLoaded', () => {
       if (!confirm(el.dataset.confirm || 'Tem certeza?')) e.preventDefault();
     });
   });
+
+  iniciarCarrosselBanners();
 });
