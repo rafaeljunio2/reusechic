@@ -5,6 +5,7 @@ error_reporting(E_ALL);
 
 if (session_status() === PHP_SESSION_NONE) session_start();
 require_once __DIR__ . '/db.php';
+require_once __DIR__ . '/cloudinary.php';
 
 // Carrega configurações do banco e disponibiliza em $config
 $config = [];
@@ -26,6 +27,9 @@ function formatTelefone(?string $numero): string {
 function url($p = '') { return BASE . $p; }
 function uploadUrl(?string $file): ?string {
     if (!$file) return null;
+    // URL do Cloudinary — retorna diretamente
+    if (str_starts_with($file, 'http://') || str_starts_with($file, 'https://')) return $file;
+    // Legado: caminho local (imagens antigas antes da migração)
     $file = basename(preg_replace('#^uploads/#', '', ltrim(str_replace('\\', '/', $file), '/')));
     return url('/uploads/' . $file);
 }
@@ -38,18 +42,14 @@ function requireCliente() {
     if (!isLoggedCliente()) { header('Location: ' . url('/login.php')); exit; }
 }
 
-function uploadsPath(): string {
-    static $path;
-    return $path ??= dirname(dirname(__DIR__)) . '/uploads/';
-}
-
+// Mapeia o prefixo legado para uma subpasta no Cloudinary e delega o upload.
 function saveUpload(array $file, string $prefix): ?string {
-    if (($file['error'] ?? UPLOAD_ERR_NO_FILE) !== UPLOAD_ERR_OK || empty($file['tmp_name'])) return null;
-    $dir = uploadsPath();
-    if (!is_dir($dir) && !mkdir($dir, 0775, true)) return null;
-    $ext = strtolower(pathinfo($file['name'], PATHINFO_EXTENSION));
-    $name = uniqid($prefix) . ($ext ? '.' . $ext : '');
-    if (!move_uploaded_file($file['tmp_name'], $dir . $name)) return null;
-    chmod($dir . $name, 0644);
-    return $name;
+    $folder = match($prefix) {
+        'p_'    => 'reusechic/produtos',
+        'g_'    => 'reusechic/galeria',
+        'b_'    => 'reusechic/banners',
+        'logo_' => 'reusechic/logo',
+        default => 'reusechic',
+    };
+    return cloudinaryUpload($file, $folder);
 }

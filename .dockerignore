@@ -4,3 +4,4 @@ CLAUDE.md
 README.md
 uploads/*
 !uploads/.gitkeep
+vendor/
