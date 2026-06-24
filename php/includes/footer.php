@@ -4,7 +4,7 @@
     <div class="rodape-loja__coluna">
         <h4>Endereço</h4>
         <p>
-            Área Especial para Indústria<br>
+            Área Especial<br>
             Lote nº 02, Setor Leste, Gama,<br>
             Brasília, DF - CEP 72.445-020
         </p>
