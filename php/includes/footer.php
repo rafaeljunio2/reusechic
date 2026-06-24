@@ -5,7 +5,7 @@
         <h4>Endereço</h4>
         <p>
             Área Especial<br>
-            Lote nº 02, Setor Leste, Gama,<br>
+            Lote nº 2, Setor Leste, Gama,<br>
             Brasília, DF - CEP 72.445-020
         </p>
     </div>
