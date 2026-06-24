@@ -5,3 +5,5 @@ README.md
 uploads/*
 !uploads/.gitkeep
 vendor/
+.env
+composer
