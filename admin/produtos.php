@@ -1,10 +1,14 @@
-<?php require __DIR__.'/_layout.php';
-$msg='';
+<?php
+require_once __DIR__.'/../php/config/init.php';
+requireAdmin();
+
+$msg = '';
 
 // Excluir produto
 if (isset($_GET['del'])) {
     $pdo->prepare("DELETE FROM produtos WHERE id=?")->execute([(int)$_GET['del']]);
-    $msg = 'Produto removido.';
+    header('Location: ' . url('/admin/produtos.php') . '?msg=removido');
+    exit;
 }
 
 // Excluir imagem da galeria
@@ -12,10 +16,14 @@ if (isset($_GET['del_img'])) {
     $imgId = (int)$_GET['del_img'];
     $row = $pdo->prepare("SELECT produto_id FROM imagens_produtos WHERE id=?");
     $row->execute([$imgId]);
-    $prodId = $row->fetchColumn();
+    $prodId = (int)$row->fetchColumn();
     $pdo->prepare("DELETE FROM imagens_produtos WHERE id=?")->execute([$imgId]);
-    header('Location: ?edit=' . (int)$prodId);
+    header('Location: ' . url('/admin/produtos.php') . '?edit=' . $prodId);
     exit;
+}
+
+if (isset($_GET['msg'])) {
+    $msg = $_GET['msg'] === 'removido' ? 'Produto removido.' : '';
 }
 
 // Salvar (criar/editar)
@@ -72,8 +80,10 @@ if (isset($_GET['edit'])) {
     }
 }
 
-$cats    = $pdo->query("SELECT * FROM categorias ORDER BY nome")->fetchAll();
+$cats     = $pdo->query("SELECT * FROM categorias ORDER BY nome")->fetchAll();
 $produtos = $pdo->query("SELECT p.*, c.nome cat FROM produtos p LEFT JOIN categorias c ON c.id=p.categoria_id ORDER BY p.criado_em DESC")->fetchAll();
+
+require __DIR__.'/_layout.php';
 ?>
 <h1>Produtos</h1>
 <?php if ($msg): ?>
@@ -131,7 +141,7 @@ $produtos = $pdo->query("SELECT p.*, c.nome cat FROM produtos p LEFT JOIN catego
           <?php foreach ($galeria as $g): ?>
             <div style="position:relative;display:inline-block">
               <img src="<?= e(uploadUrl($g['caminho'])) ?>" style="width:70px;height:70px;object-fit:cover;border-radius:6px">
-              <a href="?del_img=<?= $g['id'] ?>"
+              <a href="<?= url('/admin/produtos.php') ?>?del_img=<?= $g['id'] ?>&edit=<?= $edit['id'] ?>"
                  data-confirm="Remover esta imagem da galeria?"
                  style="position:absolute;top:-6px;right:-6px;background:#e53e3e;color:#fff;border-radius:50%;width:18px;height:18px;font-size:11px;display:flex;align-items:center;justify-content:center;text-decoration:none;line-height:1">✕</a>
             </div>
@@ -163,7 +173,7 @@ $produtos = $pdo->query("SELECT p.*, c.nome cat FROM produtos p LEFT JOIN catego
       <td><?= e($p['status']) ?></td>
       <td>
         <a href="?edit=<?= $p['id'] ?>">✏️</a>
-        <a href="?del=<?= $p['id'] ?>" data-confirm="Excluir produto?">🗑️</a>
+        <a href="<?= url('/admin/produtos.php') ?>?del=<?= $p['id'] ?>" data-confirm="Excluir produto?">🗑️</a>
       </td>
     </tr>
   <?php endforeach; ?>
