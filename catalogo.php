@@ -6,8 +6,8 @@ $q = trim($_GET['q'] ?? '');
 $cat = $_GET['categoria'] ?? '';
 $tam = $_GET['tamanho'] ?? '';
 $ord = $_GET['ord'] ?? 'recentes';
-$min = (float)($_GET['min'] ?? 0);
-$max = (float)($_GET['max'] ?? 99999);
+$min = isset($_GET['min']) && $_GET['min'] !== '' ? (float)$_GET['min'] : 0;
+$max = isset($_GET['max']) && $_GET['max'] !== '' ? (float)$_GET['max'] : 99999;
 
 $where = ["status='disponivel'", "preco BETWEEN ? AND ?"];
 $params = [$min,$max];
