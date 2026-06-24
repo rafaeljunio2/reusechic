@@ -9,7 +9,7 @@ $qtd_carrinho = isset($itens_carrinho) ? count($itens_carrinho) : 0;
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title><?= e($config['nome_site'] ?? 'ReuseChic') ?></title>
+<title><?= e($config['nome_site'] ?? 'Reuse Chic') ?></title>
 <link rel="stylesheet" href="<?= url('/css/style.css') ?>">
 <link rel="stylesheet" href="<?= url('/css/header.css') ?>">
 <link rel="stylesheet" href="<?= url('/css/conteudo-loja.css') ?>">
