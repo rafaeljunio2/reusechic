@@ -16,6 +16,13 @@ foreach ($pdo->query("SELECT chave, valor FROM configuracoes") as $row) {
 define('BASE', rtrim(str_replace(rtrim($_SERVER['DOCUMENT_ROOT'], '/'), '', dirname(dirname(__DIR__))), '/'));
 
 function e($s) { return htmlspecialchars($s ?? '', ENT_QUOTES, 'UTF-8'); }
+function formatTelefone(?string $numero): string {
+    $d = preg_replace('/\D/', '', $numero ?? '');
+    if (str_starts_with($d, '55') && strlen($d) > 11) $d = substr($d, 2);
+    if (strlen($d) === 11) return sprintf('(%s) %s-%s', substr($d, 0, 2), substr($d, 2, 5), substr($d, 7));
+    if (strlen($d) === 10) return sprintf('(%s) %s-%s', substr($d, 0, 2), substr($d, 2, 4), substr($d, 6));
+    return $numero ?? '';
+}
 function url($p = '') { return BASE . $p; }
 function isLoggedCliente() { return !empty($_SESSION['usuario_id']); }
 function isLoggedAdmin()   { return !empty($_SESSION['admin_id']); }

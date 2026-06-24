@@ -66,7 +66,7 @@ $banners = [
 <h2 class="section-title">PRODUTOS</h2>
 <div class="products-grid">
   <?php
-  $stmt = $pdo->query("SELECT * FROM produtos WHERE status='disponivel' ORDER BY criado_em DESC LIMIT 12");
+  $stmt = $pdo->query("SELECT * FROM produtos WHERE status='disponivel' ORDER BY criado_em DESC LIMIT 14");
   foreach ($stmt as $produto):
     require __DIR__ . '/php/includes/card-produto.php';
   endforeach;
