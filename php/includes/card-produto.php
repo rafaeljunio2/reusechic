@@ -16,9 +16,7 @@
 
 $id = (int) ($produto['id'] ?? $id ?? 0);
 $estado = $produto['estado'] ?? 'Ótima';
-$img = !empty($produto['imagem_principal'])
-    ? url('/uploads/') . $produto['imagem_principal']
-    : null;
+$img = uploadUrl($produto['imagem_principal'] ?? null);
 ?>
 <article class="card-produto">
 

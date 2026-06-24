@@ -9,4 +9,6 @@ COPY . /var/www/html/
 RUN chown -R www-data:www-data /var/www/html \
     && chmod 775 /var/www/html/uploads
 
+VOLUME ["/var/www/html/uploads"]
+
 EXPOSE 80

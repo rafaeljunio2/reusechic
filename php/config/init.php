@@ -24,6 +24,11 @@ function formatTelefone(?string $numero): string {
     return $numero ?? '';
 }
 function url($p = '') { return BASE . $p; }
+function uploadUrl(?string $file): ?string {
+    if (!$file) return null;
+    $file = basename(preg_replace('#^uploads/#', '', ltrim(str_replace('\\', '/', $file), '/')));
+    return url('/uploads/' . $file);
+}
 function isLoggedCliente() { return !empty($_SESSION['usuario_id']); }
 function isLoggedAdmin()   { return !empty($_SESSION['admin_id']); }
 function requireAdmin() {
@@ -44,5 +49,5 @@ function saveUpload(array $file, string $prefix): ?string {
     if (!is_dir($dir) && !mkdir($dir, 0775, true)) return null;
     $ext = strtolower(pathinfo($file['name'], PATHINFO_EXTENSION));
     $name = uniqid($prefix) . ($ext ? '.' . $ext : '');
-    return move_uploaded_file($file['tmp_name'], $dir . $name) ? $name : null;
+    return move_uploaded_file($file['tmp_name'], $dir . $name) ? (chmod($dir . $name, 0644) || true) && $name : null;
 }
