@@ -4,7 +4,4 @@ services:
     ports:
       - "80:80"
     volumes:
-      - uploads_data:/var/www/html/uploads
-
-volumes:
-  uploads_data:
+      - /opt/reusechic/uploads:/var/www/html/uploads
