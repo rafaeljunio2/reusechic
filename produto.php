@@ -11,14 +11,14 @@ require __DIR__.'/php/includes/header.php';
 
 $wppMsg = urlencode("Olá, tenho interesse no produto: {$p['nome']} ({$p['tamanho']}) - R$ ".number_format($p['preco'],2,',','.'));
 $wppUrl = "https://wa.me/{$config['whatsapp']}?text={$wppMsg}";
-$mainImg = $p['imagem_principal'] ? url('/uploads/').$p['imagem_principal'] : 'https://via.placeholder.com/500';
+$mainImg = uploadUrl($p['imagem_principal']) ?? 'https://via.placeholder.com/500';
 ?>
 <div class="product-detail">
   <div class="gallery">
     <img src="<?=e($mainImg)?>" alt="<?=e($p['nome'])?>">
     <div style="display:flex;gap:8px;margin-top:10px;flex-wrap:wrap">
       <?php foreach($galeria as $g):?>
-        <img src="<?= url('/uploads/') ?><?=e($g['caminho'])?>" style="width:80px;height:80px;object-fit:cover;border-radius:8px">
+        <img src="<?= e(uploadUrl($g['caminho'])) ?>" style="width:80px;height:80px;object-fit:cover;border-radius:8px">
       <?php endforeach;?>
     </div>
   </div>

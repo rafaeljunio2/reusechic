@@ -4,9 +4,8 @@ if (isset($_GET['del'])) { $pdo->prepare("DELETE FROM banners WHERE id=?")->exec
 if ($_SERVER['REQUEST_METHOD']==='POST') {
     $img = $_POST['img_existente']??'';
     if (!empty($_FILES['imagem']['name'])) {
-        $ext = pathinfo($_FILES['imagem']['name'],PATHINFO_EXTENSION);
-        $img = uniqid('b_').'.'.$ext;
-        move_uploaded_file($_FILES['imagem']['tmp_name'], __DIR__.'/../uploads/'.$img);
+        $saved = saveUpload($_FILES['imagem'], 'b_');
+        if ($saved) $img = $saved;
     }
     $id=(int)($_POST['id']??0);
     if ($id) $pdo->prepare("UPDATE banners SET titulo=?,subtitulo=?,imagem=?,link=?,ativo=?,ordem=? WHERE id=?")
@@ -36,7 +35,7 @@ $banners = $pdo->query("SELECT * FROM banners ORDER BY ordem")->fetchAll();
 <table>
   <tr><th>Imagem</th><th>Título</th><th>Ordem</th><th>Ativo</th><th>Ações</th></tr>
   <?php foreach($banners as $b):?>
-    <tr><td><img src="<?= url('/uploads/') ?><?=e($b['imagem'])?>" style="width:80px"></td>
+    <tr><td><?php if($b['imagem']):?><img src="<?= e(uploadUrl($b['imagem'])) ?>" style="width:80px"><?php endif;?></td>
     <td><?=e($b['titulo'])?></td><td><?=$b['ordem']?></td><td><?=$b['ativo']?'✅':'❌'?></td>
     <td><a href="?edit=<?=$b['id']?>">✏️</a> <a href="?del=<?=$b['id']?>" data-confirm="Excluir?">🗑️</a></td></tr>
   <?php endforeach;?>

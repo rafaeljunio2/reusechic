@@ -36,7 +36,7 @@ $wppUrl = "https://wa.me/{$config['whatsapp']}?text=".$msg;
 <div style="display:grid;grid-template-columns:2fr 1fr;gap:20px" class="cart-layout">
   <div>
     <?php foreach ($itens as $p):
-      $img=$p['imagem_principal']?url('/uploads/').$p['imagem_principal']:'https://via.placeholder.com/100'; ?>
+      $img = uploadUrl($p['imagem_principal']) ?? 'https://via.placeholder.com/100'; ?>
       <div class="cart-row">
         <img src="<?=e($img)?>">
         <div class="info">

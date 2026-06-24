@@ -28,7 +28,8 @@ $qtd_carrinho = isset($itens_carrinho) ? count($itens_carrinho) : 0;
 <header class="topo-loja">
     <!-- LOGO -->
     <a href="<?= url('/index.php') ?>" class="topo-loja__logo">
-        <img src="./img/logo.png" alt="ReuseChic">
+        <?php $logoSrc = uploadUrl($config['logo'] ?? null) ?? url('/img/logo.png'); ?>
+        <img src="<?= e($logoSrc) ?>" alt="<?= e($config['nome_site'] ?? 'ReuseChic') ?>">
     </a>
 
     <!-- BUSCA -->

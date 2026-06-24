@@ -49,5 +49,7 @@ function saveUpload(array $file, string $prefix): ?string {
     if (!is_dir($dir) && !mkdir($dir, 0775, true)) return null;
     $ext = strtolower(pathinfo($file['name'], PATHINFO_EXTENSION));
     $name = uniqid($prefix) . ($ext ? '.' . $ext : '');
-    return move_uploaded_file($file['tmp_name'], $dir . $name) ? (chmod($dir . $name, 0644) || true) && $name : null;
+    if (!move_uploaded_file($file['tmp_name'], $dir . $name)) return null;
+    chmod($dir . $name, 0644);
+    return $name;
 }

@@ -94,7 +94,7 @@ $produtos = $pdo->query("SELECT p.*, c.nome cat FROM produtos p LEFT JOIN catego
   <tr><th>Imagem</th><th>Nome</th><th>Categoria</th><th>Preço</th><th>Status</th><th>Ações</th></tr>
   <?php foreach($produtos as $p):?>
     <tr>
-      <td><?php if($p['imagem_principal']):?><img src="<?= url('/uploads/') ?><?=e($p['imagem_principal'])?>" style="width:50px;height:50px;object-fit:cover;border-radius:6px"><?php endif;?></td>
+      <td><?php if($p['imagem_principal']):?><img src="<?= e(uploadUrl($p['imagem_principal'])) ?>" style="width:50px;height:50px;object-fit:cover;border-radius:6px"><?php endif;?></td>
       <td><?=e($p['nome'])?></td>
       <td><?=e($p['cat']??'-')?></td>
       <td>R$ <?=number_format($p['preco'],2,',','.')?></td>

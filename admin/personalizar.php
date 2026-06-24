@@ -6,11 +6,11 @@ if ($_SERVER['REQUEST_METHOD']==='POST') {
             ->execute([$chave,$valor]);
     }
     if (!empty($_FILES['logo']['name'])) {
-        $ext = pathinfo($_FILES['logo']['name'],PATHINFO_EXTENSION);
-        $fn = 'logo.'.$ext;
-        move_uploaded_file($_FILES['logo']['tmp_name'], __DIR__.'/../uploads/'.$fn);
-        $pdo->prepare("INSERT INTO configuracoes (chave,valor) VALUES ('logo',?) ON DUPLICATE KEY UPDATE valor=VALUES(valor)")
-            ->execute(['uploads/'.$fn]);
+        $fn = saveUpload($_FILES['logo'], 'logo_');
+        if ($fn) {
+            $pdo->prepare("INSERT INTO configuracoes (chave,valor) VALUES ('logo',?) ON DUPLICATE KEY UPDATE valor=VALUES(valor)")
+                ->execute([$fn]);
+        }
     }
     $msg='Configurações atualizadas! Recarregue a página.';
     // recarrega
