@@ -1,5 +1,13 @@
 <?php
 require_once __DIR__.'/../php/config/init.php';
+
+// Permite apenas 1 administrador no sistema
+$adminExiste = (int)$pdo->query("SELECT COUNT(*) FROM administradores")->fetchColumn() > 0;
+if ($adminExiste) {
+    header('Location: ' . url('/admin/login.php') . '?erro=registro_bloqueado');
+    exit;
+}
+
 $msg='';
 $erros=[];
 if ($_SERVER['REQUEST_METHOD']==='POST') {
@@ -79,7 +87,7 @@ if ($_SERVER['REQUEST_METHOD']==='POST') {
       <form class="auth-card" method="post">
         <h1>SEJA BEM VINDO</h1><p class="sub">Realize o cadastro</p>
         <?php if($erros):?>
-          <div class="alert alert-error"><?= e(implode('<br>', $erros)) ?></div>
+          <div class="alert alert-error"><?= implode('<br>', array_map('e', $erros)) ?></div>
         <?php elseif($msg):?>
           <div class="alert alert-success"><?=e($msg)?></div>
         <?php endif;?>
