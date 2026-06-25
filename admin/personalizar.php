@@ -10,16 +10,18 @@ if ($_SERVER['REQUEST_METHOD']==='POST') {
         if ($fn) {
             $pdo->prepare("INSERT INTO configuracoes (chave,valor) VALUES ('logo',?) ON DUPLICATE KEY UPDATE valor=VALUES(valor)")
                 ->execute([$fn]);
+        } else {
+            $msg = 'Erro ao fazer upload da logo. Verifique as configurações do Cloudinary.';
         }
     }
-    $msg='Configurações atualizadas! Recarregue a página.';
+    if (!$msg) $msg = 'Configurações atualizadas! Recarregue a página.';
     // recarrega
     $config=[];
     foreach ($pdo->query("SELECT chave, valor FROM configuracoes") as $row) $config[$row['chave']]=$row['valor'];
 }
 ?>
 <h1>Personalização do Site</h1>
-<?php if($msg):?><div class="alert alert-success"><?=e($msg)?></div><?php endif;?>
+<?php if($msg):?><div class="alert <?= str_contains($msg, 'Erro') ? 'alert-error' : 'alert-success' ?>"><?=e($msg)?></div><?php endif;?>
 <div class="card">
   <form method="post" enctype="multipart/form-data">
     <div class="form-row"><label>Nome do brechó</label><input name="cfg[nome_site]" value="<?=e($config['nome_site']??'')?>"></div>
@@ -33,7 +35,13 @@ if ($_SERVER['REQUEST_METHOD']==='POST') {
     <div class="form-row"><label>Endereço</label><input name="cfg[endereco]" value="<?=e($config['endereco']??'')?>"></div>
     <div class="form-row"><label>Título da Home</label><input name="cfg[titulo_home]" value="<?=e($config['titulo_home']??'')?>"></div>
     <div class="form-row"><label>Subtítulo da Home</label><input name="cfg[subtitulo_home]" value="<?=e($config['subtitulo_home']??'')?>"></div>
-    <div class="form-row"><label>Logo (atual: <?=e($config['logo']??'-')?>)</label><input type="file" name="logo" accept="image/*"></div>
+    <div class="form-row">
+      <label>Logo</label>
+      <?php if (!empty($config['logo']) && ($logoUrl = uploadUrl($config['logo']))): ?>
+        <img src="<?= e($logoUrl) ?>" alt="Logo atual" style="display:block;max-height:60px;margin-bottom:8px">
+      <?php endif; ?>
+      <input type="file" name="logo" accept="image/*">
+    </div>
     <button class="btn">Salvar</button>
   </form>
 </div>

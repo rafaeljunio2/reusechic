@@ -23,29 +23,32 @@ $produtos = $stmt->fetchAll();
 $cats = $pdo->query("SELECT * FROM categorias ORDER BY nome")->fetchAll();
 ?>
 <h1 class="section-title">PRODUTOS</h1>
-<form class="filters" method="get">
-  <input name="q" value="<?=e($q)?>" placeholder="Buscar...">
-  <select name="categoria">
-    <option value="">Categoria</option>
-    <?php foreach($cats as $c):?>
-    <option value="<?=$c['id']?>" <?=$cat==$c['id']?'selected':''?>><?=e($c['nome'])?></option>
-    <?php endforeach;?>
-  </select>
-  <select name="tamanho">
-    <option value="">Tamanho</option>
-    <?php foreach(['PP','P','M','G','GG'] as $t):?>
-    <option <?=$tam===$t?'selected':''?>><?=$t?></option>
-    <?php endforeach;?>
-  </select>
-  <input type="number" name="min" placeholder="Min R$" value="<?=$min?:''?>">
-  <input type="number" name="max" placeholder="Max R$" value="<?=$max!=99999?$max:''?>">
-  <select name="ord">
-    <option value="recentes" <?=$ord==='recentes'?'selected':''?>>Mais recentes</option>
-    <option value="menor" <?=$ord==='menor'?'selected':''?>>Menor preço</option>
-    <option value="maior" <?=$ord==='maior'?'selected':''?>>Maior preço</option>
-  </select>
-  <button class="btn">Filtrar</button>
-</form>
+<div class="products-form">
+  <form class="filters" method="get">
+    <input name="q" value="<?=e($q)?>" placeholder="Buscar...">
+    <select name="categoria">
+      <option value="">Categoria</option>
+      <?php foreach($cats as $c):?>
+      <option value="<?=$c['id']?>" <?=$cat==$c['id']?'selected':''?>><?=e($c['nome'])?></option>
+      <?php endforeach;?>
+    </select>
+    <select name="tamanho">
+      <option value="">Tamanho</option>
+      <?php foreach(['PP','P','M','G','GG'] as $t):?>
+      <option <?=$tam===$t?'selected':''?>><?=$t?></option>
+      <?php endforeach;?>
+    </select>
+    <input type="number" name="min" placeholder="Min R$" value="<?=$min?:''?>">
+    <input type="number" name="max" placeholder="Max R$" value="<?=$max!=99999?$max:''?>">
+    <select name="ord">
+      <option value="recentes" <?=$ord==='recentes'?'selected':''?>>Mais recentes</option>
+      <option value="menor" <?=$ord==='menor'?'selected':''?>>Menor preço</option>
+      <option value="maior" <?=$ord==='maior'?'selected':''?>>Maior preço</option>
+    </select>
+    <button class="btn">Filtrar</button>
+  </form>
+</div>
+
 
 <div class="products-grid">
   <?php foreach($produtos as $p):

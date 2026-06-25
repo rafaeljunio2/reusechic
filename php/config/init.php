@@ -6,8 +6,9 @@ error_reporting(E_ALL);
 if (session_status() === PHP_SESSION_NONE) session_start();
 require_once dirname(__DIR__, 2) . '/vendor/autoload.php';
 
-// Carrega .env se existir (local); em produção o Dokploy injeta as vars diretamente
-$dotenv = Dotenv\Dotenv::createImmutable(dirname(__DIR__, 2));
+// Carrega .env se existir (local); em produção o Dokploy injeta as vars diretamente.
+// createUnsafeImmutable também popula getenv() — o SDK do Cloudinary lê CLOUDINARY_URL assim.
+$dotenv = Dotenv\Dotenv::createUnsafeImmutable(dirname(__DIR__, 2));
 $dotenv->safeLoad();
 
 require_once __DIR__ . '/db.php';

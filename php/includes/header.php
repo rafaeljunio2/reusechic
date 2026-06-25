@@ -16,6 +16,7 @@ $qtd_carrinho = isset($itens_carrinho) ? count($itens_carrinho) : 0;
 <link rel="stylesheet" href="<?= url('/css/card-produto.css') ?>">
 <link rel="stylesheet" href="<?= url('/css/rodape-loja.css') ?>">
 <link rel="stylesheet" href="<?= url('/css/banner-promocional.css') ?>">
+<link rel="stylesheet" href="<?= url('/css/carrinho.css') ?>">
 <style>
   :root {
     --primary-color: <?= e($config['cor_primaria'] ?? '#c98b7a') ?>;
@@ -28,7 +29,7 @@ $qtd_carrinho = isset($itens_carrinho) ? count($itens_carrinho) : 0;
 <header class="topo-loja">
     <!-- LOGO -->
     <a href="<?= url('/index.php') ?>" class="topo-loja__logo">
-        <img src="<?= url('/img/logo.png') ?>" alt="ReuseChic">
+        <img src="<?= e(uploadUrl($config['logo'] ?? null) ?? url('/img/logo.png')) ?>" alt="<?= e($config['nome_site'] ?? 'Reuse Chic') ?>">
     </a>
 
     <!-- BUSCA -->
