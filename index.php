@@ -1,51 +1,89 @@
-<?php 
-require_once __DIR__ . '/php/config/init.php'; 
-require __DIR__ . '/php/includes/header.php'; 
-// $banners = $pdo->query("SELECT * FROM banners ORDER BY ordem")->fetchAll();
+<?php
+require_once __DIR__ . '/php/config/init.php';
+require __DIR__ . '/php/includes/header.php';
 
-$banners = [
+$bannersPadrao = [
     [
-        'selo'       => 'Exclusivo: 09 a 24 de Abril',
-        'linha1'     => '50%',
-        'linha2'     => 'Off',
-        'cta_texto'  => 'Compre agora!',
-        'cta_link'   => 'catalogo.php',
+        'selo'      => 'Exclusivo: 09 a 24 de Abril',
+        'linha1'    => '50%',
+        'linha2'    => 'Off',
+        'cta_texto' => 'Compre agora!',
+        'cta_link'  => url('/catalogo.php'),
+        'imagem'    => '',
     ],
     [
-        'selo'       => 'Coleção desta semana',
-        'linha1'     => 'Peças',
-        'linha2'     => 'Novas',
-        'cta_texto'  => 'Conferir agora!',
-        'cta_link'   => 'catalogo.php',
+        'selo'      => 'Coleção desta semana',
+        'linha1'    => 'Peças',
+        'linha2'    => 'Novas',
+        'cta_texto' => 'Conferir agora!',
+        'cta_link'  => url('/catalogo.php'),
+        'imagem'    => '',
     ],
     [
-        'selo'       => 'Todo dia tem garimpo',
-        'linha1'     => 'Achados',
-        'linha2'     => 'Únicos',
-        'cta_texto'  => 'Ver catálogo!',
-        'cta_link'   => 'catalogo.php',
+        'selo'      => 'Todo dia tem garimpo',
+        'linha1'    => 'Achados',
+        'linha2'    => 'Únicos',
+        'cta_texto' => 'Ver catálogo!',
+        'cta_link'  => url('/catalogo.php'),
+        'imagem'    => '',
     ],
 ];
+
+$bannerLink = function (?string $link): string {
+    $link = trim($link ?? '');
+    if ($link === '') return '';
+    if (str_starts_with($link, 'http://') || str_starts_with($link, 'https://')) return $link;
+    return url('/' . ltrim($link, '/'));
+};
+
+$rows = $pdo->query("SELECT titulo, subtitulo, imagem, link FROM banners WHERE ativo = 1 ORDER BY ordem, id")->fetchAll();
+
+if ($rows) {
+    $banners = array_map(function (array $row) use ($bannerLink): array {
+        return [
+            'selo'      => '',
+            'linha1'    => $row['titulo'] ?? '',
+            'linha2'    => $row['subtitulo'] ?? '',
+            'cta_texto' => 'Ver mais',
+            'cta_link'  => $bannerLink($row['link'] ?? ''),
+            'imagem'    => $row['imagem'] ?? '',
+        ];
+    }, $rows);
+} else {
+    $banners = $bannersPadrao;
+}
 ?>
 
 <section class="carrossel-banners" id="carrossel-banners" aria-label="Promoções em destaque">
     <?php foreach ($banners as $indice => $banner): ?>
+        <?php $temImagem = !empty($banner['imagem']); ?>
         <div
-            class="banner-slide <?= $indice === 0 ? 'banner-slide--ativo' : '' ?>"
+            class="banner-slide <?= $indice === 0 ? 'banner-slide--ativo' : '' ?><?= $temImagem ? ' banner-slide--imagem' : '' ?>"
             data-slide="<?= $indice ?>"
+            <?= $temImagem ? 'style="background-image:url(' . e(uploadUrl($banner['imagem'])) . ')"' : '' ?>
         >
-            <!-- "%" decorativos, conforme o fundo do banner no Figma -->
-            <div class="banner-slide__decoracao" aria-hidden="true">
-                <span style="top:10%; left:6%;">%</span>
-                <span style="top:55%; left:14%; font-size:40px;">%</span>
-                <span style="top:15%; right:8%;">%</span>
-                <span style="top:60%; right:14%; font-size:40px;">%</span>
-            </div>
+            <?php if (!$temImagem): ?>
+                <!-- "%" decorativos, conforme o fundo do banner no Figma -->
+                <div class="banner-slide__decoracao" aria-hidden="true">
+                    <span style="top:10%; left:6%;">%</span>
+                    <span style="top:55%; left:14%; font-size:40px;">%</span>
+                    <span style="top:15%; right:8%;">%</span>
+                    <span style="top:60%; right:14%; font-size:40px;">%</span>
+                </div>
+            <?php endif; ?>
 
-            <span class="banner-slide__selo"><?= e($banner['selo']) ?></span>
-            <h1 class="banner-slide__titulo"><?= e($banner['linha1']) ?></h1>
-            <p class="banner-slide__subtitulo"><?= e($banner['linha2']) ?></p>
-            <a href="<?= e($banner['cta_link']) ?>" class="banner-slide__cta"><?= e($banner['cta_texto']) ?></a>
+            <?php if (!empty($banner['selo'])): ?>
+                <span class="banner-slide__selo"><?= e($banner['selo']) ?></span>
+            <?php endif; ?>
+            <?php if (!empty($banner['linha1'])): ?>
+                <h1 class="banner-slide__titulo"><?= e($banner['linha1']) ?></h1>
+            <?php endif; ?>
+            <?php if (!empty($banner['linha2'])): ?>
+                <p class="banner-slide__subtitulo"><?= e($banner['linha2']) ?></p>
+            <?php endif; ?>
+            <?php if (!empty($banner['cta_link'])): ?>
+                <a href="<?= e($banner['cta_link']) ?>" class="banner-slide__cta"><?= e($banner['cta_texto']) ?></a>
+            <?php endif; ?>
         </div>
     <?php endforeach; ?>
 

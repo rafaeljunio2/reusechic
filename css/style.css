@@ -480,6 +480,12 @@ th {
   display: block;
 }
 
+.banner-slide--imagem {
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
 /* "%" decorativos espalhados pelo banner, conforme o Figma */
 .banner-slide__decoracao {
   position: absolute;

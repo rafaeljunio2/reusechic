@@ -1,6 +1,14 @@
 <?php require __DIR__.'/_layout.php';
-$msg='';
-if (isset($_GET['del'])) { $pdo->prepare("DELETE FROM banners WHERE id=?")->execute([(int)$_GET['del']]); $msg='Excluído.'; }
+$msg = match ($_GET['msg'] ?? '') {
+    'salvo'    => 'Salvo.',
+    'excluido' => 'Excluído.',
+    default    => '',
+};
+if (isset($_GET['del'])) {
+    $pdo->prepare("DELETE FROM banners WHERE id=?")->execute([(int)$_GET['del']]);
+    header('Location: ' . url('/admin/banners.php') . '?msg=excluido');
+    exit;
+}
 if ($_SERVER['REQUEST_METHOD']==='POST') {
     $img = $_POST['img_existente']??'';
     if (!empty($_FILES['imagem']['name'])) {
@@ -12,7 +20,8 @@ if ($_SERVER['REQUEST_METHOD']==='POST') {
         ->execute([$_POST['titulo'],$_POST['subtitulo'],$img,$_POST['link'],(int)!empty($_POST['ativo']),(int)$_POST['ordem'],$id]);
     else $pdo->prepare("INSERT INTO banners (titulo,subtitulo,imagem,link,ativo,ordem) VALUES (?,?,?,?,?,?)")
         ->execute([$_POST['titulo'],$_POST['subtitulo'],$img,$_POST['link'],(int)!empty($_POST['ativo']),(int)$_POST['ordem']]);
-    $msg='Salvo.';
+    header('Location: ' . url('/admin/banners.php') . '?msg=salvo');
+    exit;
 }
 $edit = isset($_GET['edit']) ? $pdo->query("SELECT * FROM banners WHERE id=".(int)$_GET['edit'])->fetch():null;
 $banners = $pdo->query("SELECT * FROM banners ORDER BY ordem")->fetchAll();
