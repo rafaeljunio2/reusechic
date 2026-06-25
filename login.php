@@ -11,7 +11,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $_SESSION['usuario_id'] = $u['id'];
         $_SESSION['usuario_nome'] = $u['nome'];
         header('Location: ' . url('/index.php')); exit;
-    } else { $erro = 'E-mail ou senha inválidos.'; }
+    } else { $erro = 'E-mail ou senha inválidos'; } // MSG-01
 }
 ?>
 <!DOCTYPE html><html lang="pt-br"><head>
@@ -21,6 +21,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 </head><body>
 <a href="<?= url('/inicial.php') ?>" class="back-link">← Voltar</a>
 <div class="auth-wrap">
+  <?php if ($logoUrl = siteLogoUrl()): ?>
+  <img src="<?= e($logoUrl) ?>" alt="<?= e($config['nome_site'] ?? 'Reuse Chic') ?>" class="auth-logo">
+  <?php endif; ?>
   <form class="auth-card" method="post" data-validate>
     <h1>ACESSAR</h1>
     <?php if($erro): ?><div class="alert alert-error"><?= e($erro) ?></div><?php endif; ?>

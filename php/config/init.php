@@ -40,6 +40,11 @@ function uploadUrl(?string $file): ?string {
     $file = basename(preg_replace('#^uploads/#', '', ltrim(str_replace('\\', '/', $file), '/')));
     return url('/uploads/' . $file);
 }
+function siteLogoUrl(): ?string {
+    global $config;
+    if (empty($config['logo'])) return null;
+    return uploadUrl($config['logo']);
+}
 function isLoggedCliente() { return !empty($_SESSION['usuario_id']); }
 function isLoggedAdmin()   { return !empty($_SESSION['admin_id']); }
 function requireAdmin() {
