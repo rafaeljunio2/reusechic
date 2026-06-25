@@ -8,6 +8,14 @@ if ($_SERVER['REQUEST_METHOD']==='POST') {
     $contato   = trim($_POST['contato'] ?? '');
     $senha     = $_POST['senha'] ?? '';
     $confirmar = $_POST['confirmar_senha'] ?? '';
+    $contatoDigits = preg_replace('/\D/', '', $contato);
+
+    // Validação do telefone de contato
+    if ($contatoDigits === '') {
+        $erros[] = 'O telefone para WhatsApp é obrigatório'; // MSG-56
+    } elseif (!in_array(strlen($contatoDigits), [10, 11])) {
+        $erros[] = 'O telefone deve ter 10 ou 11 dígitos (com DDD)'; // MSG-55
+    }
 
     // Validação de e-mail
     if ($email === '') {
@@ -80,8 +88,9 @@ if ($_SERVER['REQUEST_METHOD']==='POST') {
         <input name="nome" value="<?= e($_POST['nome'] ?? '') ?>" required>
         <label>Email</label>
         <input type="email" name="email" value="<?= e($_POST['email'] ?? '') ?>" required>
-        <label>Contato</label>
-        <input name="contato" value="<?= e($_POST['contato'] ?? '') ?>">
+        <label>Contato (WhatsApp com DDD)</label>
+        <input name="contato" data-mask="phone" placeholder="(61) 99999-9999"
+               value="<?= e($_POST['contato'] ?? '') ?>" required>
         <label>Senha <small style="opacity:.7">(6–20 car., maiúsc., minúsc. e número)</small></label>
         <input type="password" name="senha" required>
         <label>Confirmar Senha</label>
@@ -90,5 +99,6 @@ if ($_SERVER['REQUEST_METHOD']==='POST') {
         <button class="btn btn-block">Cadastrar</button>
       </form>
     </div>
+  <script src="<?= url('/js/app.js') ?>"></script>
   </body>
 </html>

@@ -17,6 +17,15 @@ if ($_SERVER['REQUEST_METHOD']==='POST') {
         $erros[] = 'O nome não pode começar ou terminar com caracteres especiais'; // MSG-51
     }
 
+    // Validação do WhatsApp
+    $whatsapp = trim($_POST['cfg']['whatsapp'] ?? '');
+    $whatsappDigits = preg_replace('/\D/', '', $whatsapp);
+    if ($whatsappDigits === '') {
+        $erros[] = 'O telefone para WhatsApp é obrigatório'; // MSG-56
+    } elseif (strlen($whatsappDigits) < 10 || strlen($whatsappDigits) > 13) {
+        $erros[] = 'Digite um telefone válido com DDD (ex: 5561999999999 com DDI)'; // MSG-16
+    }
+
     if (empty($erros)) {
         foreach ($_POST['cfg'] as $chave=>$valor) {
             $pdo->prepare("INSERT INTO configuracoes (chave,valor) VALUES (?,?) ON DUPLICATE KEY UPDATE valor=VALUES(valor)")
@@ -40,7 +49,7 @@ if ($_SERVER['REQUEST_METHOD']==='POST') {
 ?>
 <h1>Personalização do Site</h1>
 <?php if($erros):?>
-  <div class="alert alert-error"><?= e(implode('<br>', $erros)) ?></div>
+  <div class="alert alert-error"><?= implode('<br>', array_map('e', $erros)) ?></div>
 <?php elseif($msg):?>
   <div class="alert <?= str_contains($msg, 'Erro') ? 'alert-error' : 'alert-success' ?>"><?=e($msg)?></div>
 <?php endif;?>
@@ -55,7 +64,11 @@ if ($_SERVER['REQUEST_METHOD']==='POST') {
       <div class="form-row"><label>Cor primária</label><input type="color" name="cfg[cor_primaria]" value="<?=e($config['cor_primaria']??'#c98b7a')?>"></div>
       <div class="form-row"><label>Cor secundária</label><input type="color" name="cfg[cor_secundaria]" value="<?=e($config['cor_secundaria']??'#f6dcd5')?>"></div>
     </div>
-    <div class="form-row"><label>WhatsApp (com DDI, ex: 5561999999999)</label><input name="cfg[whatsapp]" value="<?=e($config['whatsapp']??'')?>"></div>
+    <div class="form-row">
+      <label>WhatsApp <small style="color:#888">(com DDI, ex: 5561999999999)</small></label>
+      <input name="cfg[whatsapp]" placeholder="5561999999999"
+             value="<?=e($config['whatsapp']??'')?>" required>
+    </div>
     <div class="form-row"><label>E-mail de contato</label><input name="cfg[email_contato]" value="<?=e($config['email_contato']??'')?>"></div>
     <div class="form-row"><label>Endereço</label><input name="cfg[endereco]" value="<?=e($config['endereco']??'')?>"></div>
     <div class="form-row"><label>Título da Home</label><input name="cfg[titulo_home]" value="<?=e($config['titulo_home']??'')?>"></div>

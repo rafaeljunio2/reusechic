@@ -9,7 +9,7 @@
 <div class="auth-wrap">
   <div class="auth-card" style="text-align:center">
     <h1>Sou</h1>
-    <a href="<?= url('/login.php') ?>" class="btn btn-block" style="margin:20px 0">Cliente</a>
+    <a href="<?= url('/catalogo.php') ?>" class="btn btn-block" style="margin:20px 0">Cliente</a>
     <p>ou</p>
     <a href="<?= url('/admin/login.php') ?>" class="btn btn-block" style="margin-top:20px">Administrador</a>
   </div>

@@ -1,1 +1,3 @@
-</main></div></body></html>
+</main></div>
+<script src="<?= url('/js/app.js') ?>"></script>
+</body></html>
