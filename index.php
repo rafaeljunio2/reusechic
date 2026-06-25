@@ -101,7 +101,8 @@ if ($rows) {
 
 </section>
 
-<h2 class="section-title">PRODUTOS</h2>
+<h2 class="section-title">NOVOS PRODUTOS</h2>
+
 <div class="products-grid">
   <?php
   $stmt = $pdo->query("SELECT * FROM produtos WHERE status='disponivel' ORDER BY criado_em DESC LIMIT 12");
