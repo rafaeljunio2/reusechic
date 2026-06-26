@@ -2,11 +2,6 @@
 require_once __DIR__.'/../php/config/init.php';
 $erro='';
 
-// Mensagem quando redirecionado de cadastro.php
-if (isset($_GET['erro']) && $_GET['erro'] === 'registro_bloqueado') {
-    $erro = 'O cadastro de administrador está bloqueado. Já existe um administrador registrado no sistema.';
-}
-
 if ($_SERVER['REQUEST_METHOD']==='POST') {
     $stmt=$pdo->prepare("SELECT * FROM administradores WHERE email=?");
     $stmt->execute([$_POST['email']??'']);
