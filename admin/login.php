@@ -2,9 +2,6 @@
 require_once __DIR__.'/../php/config/init.php';
 $erro='';
 
-// Verifica se já existe um administrador cadastrado
-$adminExiste = (int)$pdo->query("SELECT COUNT(*) FROM administradores")->fetchColumn() > 0;
-
 // Mensagem quando redirecionado de cadastro.php
 if (isset($_GET['erro']) && $_GET['erro'] === 'registro_bloqueado') {
     $erro = 'O cadastro de administrador está bloqueado. Já existe um administrador registrado no sistema.';
@@ -48,9 +45,7 @@ if ($_SERVER['REQUEST_METHOD']==='POST') {
         <?php if($erro):?><div class="alert alert-error"><?=e($erro)?></div><?php endif;?>
         <label>Email</label><input type="email" name="email" required>
         <label>Senha</label><input type="password" name="senha" required>
-        <?php if (!$adminExiste): ?>
           <div class="links"><a href="<?= url('/admin/cadastro.php') ?>" style="color:#fff">Criar conta admin</a></div>
-        <?php endif; ?>
         <button class="btn btn-block">Entrar</button>
       </form>
     </div>
